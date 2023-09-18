@@ -41,9 +41,11 @@ library(ggrepel)
 ```
 
 ```{r Answer}
-setwd("/Users/lmn7/Documents/World_Happiness/workshop_ggplot2")
 
-happy = read.csv("Happiness_LMN_16_2019_clean.csv")
+#you will need to direct this to your own folder using the file path. Or by going to the "session" menu, selecting "set working directory" and navigating to the appropriate folder
+setwd("/Users/lmn7/Downloads/ggplot2_workshop-main")
+
+happy = read.csv("Happiness.csv")
 str(happy)
 
 happy$country_name <- as.factor(happy$country_name)

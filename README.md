@@ -1,2 +1,2 @@
 # ggplot_overview
-Materials designed for a introductory ggplot2 workshop 
+Materials designed for an introductory ggplot2 workshop at Duke University

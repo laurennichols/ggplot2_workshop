@@ -1,0 +1,150 @@
+---
+title: "ggplot2_demo"
+format: pdf
+editor: visual
+editor_options: 
+  chunk_output_type: console
+---
+
+## Install and Load Packages
+
+Install and load the following packages: tidyverse (includes ggplot and dplyr) & ggrepel
+
+```{r}
+# Install packages. You only need to do this once on a given machine
+#install.packages('tidyverse') 
+
+# Load packages. Everytime you open a new workspace.
+library(tidyverse)
+library(ggrepel) #ggrepel is a useful package for formatting labels
+
+```
+
+## Read in Data
+
+1.  set working directory
+2.  Read in happiness.csv file and name the data frame "happy"
+
+```{r}
+
+happy <- read_csv("Happiness.csv")
+
+happy
+
+```
+
+## Make a boxplot
+
+1.  Use `geom_boxplot()` to plot the median & standard error for happiness ratings within each continent
+2.  Add individual points on top of the boxplot using `geom_point()`
+3.  jitter the points using `geom_jitter()`
+4.  Make all points dark blue (using col='blue') and semi-transparent (using `alpha=0.5`)
+5.  remove the outlier from the geom_box plot now that you have all points included on the figure by specifying `outlier.shape=NA`
+
+```{r}
+
+
+
+```
+
+```{r Solution}
+
+happy |> 
+  ggplot(aes(continent, happiness))+
+  geom_boxplot(outlier.shape = NA)+
+  geom_jitter(col='blue',alpha=0.5)
+
+
+```
+
+## Sort the data
+
+1.  Reorder the boxplots in descending order (hint: specify the x axis using the `reorder()` function and specifying `FUN = median` within the function)
+2.  subset the data to just year 2019
+
+```{r}
+happy |> 
+  ggplot(aes(continent, happiness))+
+  geom_boxplot()+
+  geom_jitter()
+```
+
+## Make a Scatterplot: manipulate data
+
+1.  Plot GDP vs happiness for all country and years
+2.  GDP in the dataset has been log10 transformed. Remove the log transformation using the `exp()` function so that the figure plots the actual dollar values
+3.  Subset the data so that you are only plotting observations from 2019.
+
+```{r}
+
+happy |> 
+  filter(year==2019) |> 
+  ggplot(aes(____, _____))+
+  geom_point()
+
+?exp
+
+```
+
+## Adjusting labels and titles
+
+1.  Using labs() layer:
+
+    A. update the x and y labels to read: `"GDP per capita"` and `"Average happiness"`
+
+    B. Add the following title and subtitle: `title= 'The happiest countries are also among the richest'` `subtitle ='In 2019 the happiest countries were all Nordic countries'`
+
+2.  Use `theme_minimal()` to change the theme so that the background is white instead of grey
+
+```{r}
+happy |>  
+  filter(year==2019) |> 
+  ggplot(aes(exp(GDP), happiness))+
+  geom_point()
+
+```
+
+## Conditional Formatting and Scales
+
+1.  Amend the code below so that the countries with a happiness rating above 7.5 are a different color
+
+2.  Change the colors so that the points above 7.5 are `"darkorange"`, and those below 7.5 are `"darkgrey"`. Make all points semi-transparent using `alpha=0.7`
+
+    Note: There are multiple ways to do this. Two approaches:
+
+    1: Set conditional formatting within a single layer. ggplot will use the standard colors, so to get orange and black, you need to create a list of the colors you want, and then specify that you want ggplot to use those colors using `scale_colour_manual(values = yourcolorlist)`
+
+    2: Subset the data and plot the black and orange points seperately as two seperate geoms
+
+```{r}
+ggplot(happy %>% filter(year==2019), 
+       aes(exp(GDP), happiness))+
+  geom_point()+
+  labs(x='GDP per capita', y='Average happiness',
+       title= 'The happiest countries are also among the richest', 
+       subtitle='In 2019 the happiest countries were all Nordic countries')+
+  theme_minimal()
+
+```
+
+## Text labels
+
+Amend the code below to accomplish the following two goals:
+
+1\. Plot only the data from 2019
+
+2\. Label the countries that have happiness \>7.5 with the country name using the `geom_text_repel()` function from the extension package ggrepel
+
+```{r}
+prettyColors = c('darkgrey','darkorange')
+
+happy |> 
+  filter(year==2019) |> 
+  ggplot(aes(exp(GDP), happiness))+
+  geom_point(aes(col=happiness>7.5), alpha=0.7) +
+  labs(x='GDP per capita', y='Average happiness',
+       title= 'The happiest countries are also among the richest', 
+       subtitle='In 2019 the happiest countries were all Nordic countries')+
+  theme_minimal()+
+  scale_color_manual(values = prettyColors)
+```
